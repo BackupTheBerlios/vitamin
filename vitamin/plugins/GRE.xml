@@ -1,0 +1,39 @@
+<plugin name="GRE">
+
+   <classify>                 
+      <!-- GRE ist Schicht 4 und hat einen definierten Wert im IP-Type-Feld. -->
+      <choice>
+	 <condition>
+	    <binaryPointerWithValue   name="protocol"      location="ipv4"   value="47"/>
+	 </condition>
+	 <condition>
+	    <binaryPointerWithValue   name="next header"   location="ipv6"   value="47"/>
+	 </condition>
+      </choice>
+   </classify>
+   
+   <analyze>
+      <!-- GRE überträgt immer Ströme -->
+      <stream>
+         <!-- der Startrechner des Stroms -->
+	 <source>
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <!-- der Endrechner des Stroms -->
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+	 
+	 <!-- anhand dieser Felder kann ein Paket einem bestimmten Strom zugeordnet werden -->
+	 <comparators>
+	    <!-- laut Schema muss mindestens ein Komparator existieren -> AENDERN ! -->
+	    <comparator>
+	       <binaryPointerStream   name="destination address"   location="ip"   value="SAME"/>
+	    </comparator>
+	 </comparators>
+	 
+      </stream>
+   </analyze>
+
+</plugin>

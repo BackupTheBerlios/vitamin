@@ -1,0 +1,28 @@
+history of Vitamin
+------------------
+
+
+1.0beta
+- it works, but there is a lot of work to do ...
+
+
+1.1beta
+- Slaves do now send a timestamp of captured packets to the master.
+  Due to that diagrams can now work with this new information. Sequence
+  diagrams now have the possibility to use this information.
+  NOTE: Vitamin does not handle clock synchronization. If the clocks of
+  the slaves and the master are not synchronized (e.g. through NTP) using
+  the timestamp information will cause wrong visualization!
+
+- Slaves do now react to signal messages after starting viualization.
+  This means you can now press the STOP button and the slaves
+  will stop (yeah, really!).
+  
+- You can stop the visualization now by closing the diagram window (by
+  clicking the x). This has the same effect as pressing STOP.
+  
+- The sequence diagram now has a "reset" button.
+
+- several bugs fixed
+
+- ...

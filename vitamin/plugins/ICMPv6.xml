@@ -1,0 +1,35 @@
+<plugin name="ICMPv6">
+
+   <classify>
+      <!-- im Protokollfeld im IP-Header muss ICMPv6 eingetragen sein. Denkbar einfach.... -->
+      <choice>
+         <condition>
+	    <binaryPointerWithValue   name="protocol"   location="ipv4"   value="58"/>
+	 </condition>
+         <condition>
+	    <binaryPointerWithValue   name="next header"   location="ipv6"   value="58"/>
+	 </condition>
+      </choice>
+   </classify>
+
+   <analyze>
+      <!-- dieses Plugin visualisiert z.Zt. nur Router Advertisements (weil ich im Moment nicht mehr brauche) -->
+      <message>        
+         <source>	
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+         	
+	 <conditions>
+	    <!-- keine Conditions -->
+	 </conditions>
+      
+         <!-- wir schreiben einfach mal "ICMPv6 Router Advertisement" -->
+	 <givenText text="ICMPv6 Router Advertisement"/>
+      </message>
+   </analyze>
+
+</plugin>

@@ -1,0 +1,67 @@
+<plugin name="RTCP">
+
+   <classify>      
+      <!-- Der RTCP-Header beginnt immer mit der RTP-Versionsnummer. Diese ist immer 2. -->
+      <condition>
+         <binaryPointerWithValue   name="version"   location="data"   start="0"   length="2"   value="2"/>
+      </condition>
+      
+      <!-- Der Zielport eines RTCP-Paketes muss immer ungerade sein -->
+      <condition>
+         <binaryPointerWithValue   name="destination port"   location="tcp"   value="ODD"/>
+      </condition>
+      
+      <!-- RTCP wird grundsätzlich über TCP übertragen -->
+      <choice>
+	 <condition>
+	    <binaryPointerWithValue   name="protocol"      location="ipv4"   value="6"/>
+	 </condition>
+	 <condition>
+	    <binaryPointerWithValue   name="next header"   location="ipv6"   value="6"/>
+	 </condition>
+      </choice>
+   </classify>
+   
+   <analyze>
+   
+      <!-- sender report -->
+      <message>
+         <source>
+	    <binaryPointer name="source address" location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer name="destination address" location="ip"/>
+	 </destination>
+	 
+	 <conditions>
+	    <condition>
+	       <binaryPointer name="type" location="data" start="8" length="8" value="200"/>
+	    </condition>
+	 </conditions>
+	 
+	 <givenText text="sender report"/>
+      </message>
+      
+      <!-- receiver report -->
+      <message>
+         <source>
+	    <binaryPointer name="source address" location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer name="destination address" location="ip"/>
+	 </destination>
+	 
+	 <conditions>
+	    <condition>
+	       <binaryPointer name="type" location="data" start="8" length="8" value="201"/>
+	    </condition>
+	 </conditions>
+	 
+	 <givenText text="receiver report"/>
+      </message>
+      
+   </analyze>
+
+</plugin>

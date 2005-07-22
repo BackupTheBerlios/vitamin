@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- XML schema for Vitamin plugins
+     written 2004 - 2005 by Martin Pelzer, Fraunhofer FOKUS.SatCom
+     martin.pelzer@fokus.fraunhofer.de
+     Version 15-04-2005
+     new in this version:
+     - support for protocols with multiple objects in the data part
+     - this short introduction at the beginning of the file
+     - comments are now in English
+-->
+<xsd:schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://www.w3.org/1999/xhtml" xmlns:hfp="http://www.w3.org/2001/XMLSchema-hasFacetAndProperty">
+	<!-- the root node of each plugin -->
+	<xsd:element name="plugin" type="pluginType"/>
+	<!-- Type of the root node; consists of exactly one "classify" and exactly one
+        "analyze" tag -->
+	<xsd:complexType name="pluginType">
+		<xsd:sequence>
+			<xsd:element name="classify" type="classifyType"/>
+			<xsd:element name="analyze" type="analyzeType"/>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="xsd:string" use="required"/>
+	</xsd:complexType>
+	<!-- ======================================================================================= -->
+	<!-- In the following the types for the pointers into the packet are defined. -->
+	<!-- These standard attributes are included in every pointer type. -->
+	<xsd:attributeGroup name="standardAttr">
+		<xsd:attribute name="name" type="xsd:string"/>
+		<xsd:attribute name="location" type="locationType"/>
+	</xsd:attributeGroup>
+	<!-- In addition to the standard attributes one of the following groups has to be included. -->
+	<xsd:attributeGroup name="binaryAttr">
+		<xsd:attribute name="start" type="xsd:integer" use="optional"/>
+		<xsd:attribute name="length" type="xsd:integer" use="optional"/>
+	</xsd:attributeGroup>
+	<xsd:attributeGroup name="textualAttr">
+		<xsd:attribute name="row" type="xsd:string" use="required"/>
+		<xsd:attribute name="word" type="xsd:string" use="required"/>
+		<xsd:attribute name="additionalSeperator" type="xsd:string" use="optional"/>
+	</xsd:attributeGroup>
+	<!-- pointer into a packet with binary specification without a given value -->
+	<xsd:complexType name="binaryPointerType">
+		<xsd:attributeGroup ref="standardAttr"/>
+		<xsd:attributeGroup ref="binaryAttr"/>
+		<xsd:attribute name="type">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="string"/>
+					<xsd:enumeration value="integer"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<!-- This attribute is needed in the "text" tag in elements "message" and "name". -->
+	</xsd:complexType>
+	<!-- pointer into a packet with textual specification without a given value -->
+	<xsd:complexType name="textualPointerType">
+		<xsd:attributeGroup ref="standardAttr"/>
+		<xsd:attributeGroup ref="textualAttr"/>
+	</xsd:complexType>
+	<!-- pointer into a packet with binary specification with a given value
+        (this value has to be in the packet at the position the pointer points on
+        for the condition to become true) -->
+	<xsd:complexType name="binaryPointerWithValueType">
+		<xsd:attributeGroup ref="standardAttr"/>
+		<xsd:attributeGroup ref="binaryAttr"/>
+		<xsd:attribute name="value" type="xsd:string" use="required"/>
+	</xsd:complexType>
+	<!-- pointer into a packet with textual specification with a given value
+        (see above what the value is for) -->
+	<xsd:complexType name="textualPointerWithValueType">
+		<xsd:attributeGroup ref="standardAttr"/>
+		<xsd:attributeGroup ref="textualAttr"/>
+		<xsd:attribute name="value" type="xsd:string" use="required"/>
+	</xsd:complexType>
+	<!-- pointer into a packet with binary specification with value for comparison (for streams) -->
+	<xsd:complexType name="binaryPointerStreamType">
+		<xsd:attributeGroup ref="standardAttr"/>
+		<xsd:attributeGroup ref="binaryAttr"/>
+		<xsd:attribute name="value" type="valueStreamType" use="required"/>
+	</xsd:complexType>
+	<!-- pointer into a packet with textual specification with value for comparison (for streams) -->
+	<xsd:complexType name="textualPointerStreamType">
+		<xsd:attributeGroup ref="standardAttr"/>
+		<xsd:attributeGroup ref="textualAttr"/>
+		<xsd:attribute name="value" type="valueStreamType" use="required"/>
+	</xsd:complexType>
+	<!-- The following types are used by the pointer definitions above. -->
+	<!-- defines the comparison possibilities for stream pointers -->
+	<xsd:simpleType name="valueStreamType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="INCREASE"/>
+			<xsd:enumeration value="DECREASE"/>
+			<xsd:enumeration value="SAME"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- Each pointer is a subtype of the following definition. -->
+	<xsd:complexType name="pointer">
+		<xsd:choice>
+			<xsd:element name="binaryPointer" type="binaryPointerType"/>
+			<xsd:element name="binaryPointerWithValue" type="binaryPointerWithValueType"/>
+			<xsd:element name="textualPointer" type="textualPointerType"/>
+			<xsd:element name="textualPointerWithValue" type="textualPointerWithValueType"/>
+			<xsd:element name="binaryPointerStream" type="binaryPointerStreamType"/>
+			<xsd:element name="textualPointerStream" type="textualPointerStreamType"/>
+		</xsd:choice>
+	</xsd:complexType>
+	<!-- type for the "location" attribute" which specifies which part of the packet the
+        pointer points to (IP header, TCP header, ...) -->
+	<xsd:simpleType name="locationType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="udp"/>
+			<xsd:enumeration value="tcp"/>
+			<xsd:enumeration value="sctp"/>
+			<xsd:enumeration value="transport"/>
+			<xsd:enumeration value="ipv4"/>
+			<xsd:enumeration value="ipv6"/>
+			<xsd:enumeration value="ip"/>
+			<xsd:enumeration value="data"/>
+			<!-- UDP header -->
+			<!-- TCP header -->
+			<!-- SCTP header -->
+			<!-- a header of the transport layer (UDP, TCP, SCTP) -->
+			<!-- IPv4 header -->
+			<!-- IPv6 header -->
+			<!-- IP header (NOTE: if you use "ip" you can only
+                                               access fields that appear in both IPv4 and IPv6 headers.) -->
+			<!-- everything behind the header of the transport layer protocol -->
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ======================================================================================= -->
+	<!-- Here starts the definition of the type of the "classify" tag. -->
+	<xsd:complexType name="classifyType">
+		<xsd:group ref="conditionGroup"/>
+	</xsd:complexType>
+	<xsd:group name="conditionGroup">
+		<xsd:sequence>
+			<!-- NOTE: if you want to define conditions and choices, you first have to define all conditions
+              and then all choices. That's because I don't know how to define a type in XML schema that allows
+              mixed sequences (of conditions and choices). If you know, please e-mail me. -->
+			<xsd:element name="condition" type="conditionType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="choice" type="choiceType" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:complexType name="conditionType">
+		<xsd:complexContent>
+			<xsd:extension base="pointer">
+				<xsd:sequence>
+					<xsd:element name="conditionFor" type="conditionForType" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+			<!-- A condition A can be a condition for another condition B (if-then-statement). Only if A is true,
+                 B has to be true. Included in A you have define a "conditionFor" tag and included in this tag the
+                 "condition" tag for condition B. "conditionFor" is optional since not every condition is a condition
+                 for another one. -->
+		</xsd:complexContent>
+	</xsd:complexType>
+	<!-- The "conditionFor" tag is needed for if-then-statements. Read the comment above. -->
+	<xsd:complexType name="conditionForType">
+		<xsd:group ref="conditionGroup"/>
+	</xsd:complexType>
+	<!-- The "coice" tag gives you the possibility to define, that only one out of several conditions
+        has to be true. Include condition tags in the choice tag for that. -->
+	<xsd:complexType name="choiceType">
+		<xsd:group ref="conditionGroup"/>
+	</xsd:complexType>
+	<!-- ======================================================================================= -->
+	<!-- Here starts the definition of the "analyze" tag. -->
+	<xsd:complexType name="analyzeType">
+		<xsd:sequence>
+			<!-- You can add an optional "severalObjects" tag as the first tag in the analyze part. With
+              this tag you define that in the data part of the packet there can be several "objects"
+              which has to be analyzed separately (e.g. the COPS protocol). If you define a "several
+              Objects" tag, each of the objects in a packet will be analyzed. That means that one packet
+              can cause several messages to the master. The "severalObjects" tag has always to be
+              defined as the first tag in "analyze". -->
+			<xsd:element name="multipleObjects" type="multipleObjectsType" minOccurs="0" maxOccurs="1"/>
+			<!-- Tags in the "analyze" tags has to follow the following order (first all "stream" tags,
+              then all "connection" tags, ...). I don't know hwo to specify a mixed sequence in
+              XML schema. -->
+			<xsd:element name="stream" type="streamType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="connection" type="connectionType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="connectionEnd" type="connectionType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="message" type="messageType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="name" type="nameType" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- groups for the "severalObjects" tag type definition -->
+	<!-- the elements defined below are used in the elements "fixedObjectLength" and "variableObjectLength" -->
+	<!--<xsd:complexType name="LengthCountType">
+		<xsd:extension base="pointer">
+			<xsd:attribute name="multiplier" type="xsd:integer" use="optional"/>
+		</xsd:extension>
+	</xsd:complexType>-->
+	<xsd:element name="givenValue" type="givenValueType"/>
+	<xsd:complexType name="givenValueType">
+		<xsd:attribute name="value" type="xsd:integer"/>
+	</xsd:complexType>
+	<xsd:complexType name="objectLengthType">
+		<xsd:choice>
+			<xsd:element name="reference" type="pointer"/>
+			<xsd:element ref="givenValue"/>
+		</xsd:choice>
+		<xsd:attribute name="multiplier" type="xsd:integer" use="optional"/>
+		<xsd:attribute name="location" type="xsd:string" use="optional"/>
+	</xsd:complexType>
+	<xsd:complexType name="overallLengthType">
+		<xsd:choice>
+			<xsd:element name="reference" type="pointer"/>
+			<xsd:element ref="givenValue"/>
+		</xsd:choice>
+		<xsd:attribute name="multiplier" type="xsd:integer" use="optional"/>
+	</xsd:complexType>
+	<xsd:complexType name="numberOfObjectsType">
+		<xsd:choice>
+			<xsd:element name="reference" type="pointer"/>
+			<xsd:element ref="givenValue"/>
+		</xsd:choice>
+		<xsd:attribute name="multiplier" type="xsd:integer" use="optional"/>
+	</xsd:complexType>
+	<xsd:complexType name="nextHeaderType">
+		<xsd:choice>
+			<xsd:element name="reference" type="pointer"/>
+		</xsd:choice>
+		<xsd:attribute name="conditionValue" type="xsd:integer" use="required"/>
+		<xsd:attribute name="conditionType" type="xsd:string" use="required"/>
+	</xsd:complexType>
+	<!--type definition for the "severalObjects" tag -->
+	<xsd:complexType name="multipleObjectsType">
+		<xsd:sequence>
+			<xsd:element name="objectLength" type="objectLengthType"/>
+			<xsd:element name="overallLength" type="overallLengthType"/>
+			<xsd:element name="numberOfObjects" type="numberOfObjectsType"/>
+			<xsd:element name="nextHeader" type="nextHeaderType"/>
+		</xsd:sequence>
+		<xsd:attribute name="lengthType" type="xsd:string" use="required"/>
+		<xsd:attribute name="headerLength" type="xsd:integer" use="optional"/>
+	</xsd:complexType>
+	<xsd:group name="sourceAndDestination">
+		<xsd:sequence>
+			<xsd:element name="source" type="pointer"/>
+			<xsd:element name="destination" type="pointer"/>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:group name="textGroup">
+		<xsd:choice>
+			<xsd:element name="reference" type="pointer"/>
+			<xsd:element name="givenText" type="givenTextType"/>
+		</xsd:choice>
+	</xsd:group>
+	<xsd:group name="conditionsGroup">
+		<xsd:sequence>
+			<xsd:element name="conditions">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:group ref="conditionGroup"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:complexType name="givenTextType">
+		<xsd:attribute name="text" type="xsd:string"/>
+	</xsd:complexType>
+	<xsd:complexType name="streamType">
+		<xsd:sequence>
+			<xsd:group ref="sourceAndDestination"/>
+			<xsd:element name="comparators" type="comparatorsType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="connectionType">
+		<xsd:sequence>
+			<xsd:group ref="sourceAndDestination"/>
+			<xsd:group ref="conditionsGroup"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="messageType">
+		<xsd:sequence>
+			<xsd:group ref="sourceAndDestination"/>
+			<xsd:group ref="textGroup"/>
+			<xsd:group ref="conditionsGroup"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="nameType">
+		<xsd:sequence>
+			<xsd:element name="computer" type="pointer"/>
+			<xsd:group ref="textGroup"/>
+			<xsd:group ref="conditionsGroup"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- The following type is used by the "stream" tag type definition. -->
+	<!-- Streams don't have "conditions". They have "comparators". The difference is that comparators
+        compare the packet to information from earlier packets (e.g. an increasing number in the
+        packets of a data stream). "Conditions" only look at one packet. In the "value" attribute
+        of the pointer in a comparator you can specify things like INCREASE or DECREASE or SAME. -->
+	<xsd:complexType name="comparatorsType">
+		<xsd:sequence>
+			<xsd:element name="comparator" type="pointer" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

@@ -1,0 +1,26 @@
+<plugin name="DiffServ">
+
+   <classify>
+      <!-- jedes IP-Paket hat ein QoS-Feld -->
+   </classify>   
+   
+   <analyze>   
+      <message>
+         <source>
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+	 
+	 <conditions/>
+	 
+	 <reference>
+	    <binaryPointer   name="traffic class"   location="ipv6"/>
+	 </reference>
+	 
+      </message>   
+   </analyze>
+
+</plugin>

@@ -1,0 +1,37 @@
+<plugin name="UDP">
+
+   <classify>
+      <!-- im Protokollfeld im IP-Header muss UDP eingetragen sein. Denkbar einfach.... -->
+      <choice>
+         <condition>
+	    <binaryPointerWithValue   name="protocol"   location="ipv4"   value="17"/>
+	 </condition>
+         <condition>
+	    <binaryPointerWithValue   name="next header"   location="ipv6"   value="17"/>
+	 </condition>
+      </choice>
+   </classify>
+
+   <analyze>
+      <!-- mit diesem Plugin werden ALLE UDP-Pakete visualisiert -->
+      <message>        
+         <source>	
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+
+	 <conditions>
+	    <!-- keine Conditions, wird immer erzeugt -->
+	 </conditions>
+      
+         <!-- als Text wird hier einfach mal der source port angegeben -->
+	 <reference>
+	    <binaryPointer   name="source port"   location="udp"   start="0"   length="16"   type="integer"/>
+	 </reference>
+      </message>
+   </analyze>
+
+</plugin>

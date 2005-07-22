@@ -1,0 +1,94 @@
+<plugin name="SIP">
+
+   <classify>      
+      <!-- Der Zielport muss bei SIP immer 5060 sein. -->
+      <choice>
+         <condition>
+	    <binaryPointerWithValue   name="destination port"   location="udp"   value="5060"/>
+	 </condition>
+	 <condition>
+	    <binaryPointerWithValue   name="destination port"   location="tcp"   value="5060"/>
+	 </condition>
+      </choice>
+      
+      <!-- SIP kann über TCP, UDP oder SCTP übertragen werden -->
+      <choice>
+         <condition>
+	    <binaryPointerWithValue   name="protocol"   location="ipv4"   value="17"/>
+	 </condition>
+         <condition>
+	    <binaryPointerWithValue   name="protocol"   location="ipv4"   value="6"/>
+	 </condition>
+         <condition>
+	    <binaryPointerWithValue   name="protocol"   location="ipv4"   value="132"/>            
+	 </condition>
+         <condition>
+	    <binaryPointerWithValue   name="next header"   location="ipv6"   value="17"/>
+	 </condition>
+         <condition>
+	    <binaryPointerWithValue   name="next header"   location="ipv6"   value="6"/>
+	 </condition>
+         <condition>
+	    <binaryPointerWithValue   name="next header"   location="ipv6"   value="132"/>
+	 </condition>
+      </choice>
+   </classify>   
+   
+   <analyze>   
+      <!-- bei SIP werden Messages übertragen -->                  
+      <message>        
+         
+	 <source>
+	    <!-- Als Quelladresse wird hier die Quell-IP des IP-Paketes angegeben. Dies kann auch ein SIP-Proxy sein. -->
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <!-- Als Zieladresse wird hier die Ziel-IP des IP-Paketes angegeben. Dies kann auch ein SIP-Proxy sein. -->
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+         	
+	 <conditions>
+	    <!-- keine Conditions, wird immer versendet -->
+	    <condition>
+	       <textualPointerWithValue name="firstWord" location="data" row="1" word="1" value="SIP/2.0"/>
+	    </condition>
+	 </conditions>
+      
+         <!-- in Zeile 1 ist das erste Wort immer der Nachrichtentyp -->
+	 <reference>
+	    <textualPointer   name="typ"   location="data"   row="1"   word="3"/>
+	 </reference>
+	 
+      </message>
+      
+      
+      <message>        
+         
+	 <source>
+	    <!-- Als Quelladresse wird hier die Quell-IP des IP-Paketes angegeben. Dies kann auch ein SIP-Proxy sein. -->
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <!-- Als Zieladresse wird hier die Ziel-IP des IP-Paketes angegeben. Dies kann auch ein SIP-Proxy sein. -->
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+         	
+	 <conditions>
+	    <!-- keine Conditions, wird immer versendet -->
+	    <condition>
+	       <textualPointerWithValue name="firstWord" location="data" row="1" word="3" value="SIP/2.0"/>
+	    </condition>
+	 </conditions>
+      
+         <!-- in Zeile 1 ist das erste Wort immer der Nachrichtentyp -->
+	 <reference>
+	    <textualPointer   name="typ"   location="data"   row="1"   word="1"/>
+	 </reference>
+	 
+      </message>
+               
+   </analyze>
+
+</plugin>

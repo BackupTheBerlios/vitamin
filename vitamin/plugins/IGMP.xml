@@ -1,0 +1,268 @@
+<plugin name="IGMPv2">
+
+   <classify>                 
+      <!-- IGMP ist Schicht 4 und ist im IP-Header eindeutig im protocol/next header - Feld erkennbar -->
+      <choice>
+         <condition>      
+            <binaryPointerWithValue   name="protocol"   location="ipv4"   value="2"/>
+         </condition>
+	 <condition>      
+            <binaryPointerWithValue   name="next header"   location="ipv6"   value="2"/>
+         </condition>
+      </choice>
+                  
+   </classify>
+   
+   <analyze>
+      <!-- fuer jeden Nachrichtentyp gibt es ein Message-Tag -->
+      <message>
+         <source>	 
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+         	
+	 <conditions>
+	    <!-- Type ist 17 -->
+	    <condition>
+	       <binaryPointerWithValue   name="type"   location="data"   start="0"   length="8"   value="17"/>
+	    </condition>
+	 </conditions>
+      
+	 <givenText text="Group Membership Query"/>
+      </message>
+      
+      <message>
+         <source>	 
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+         	
+	 <conditions>
+	    <!-- Type ist 18 -->
+	    <condition>
+	       <binaryPointerWithValue   name="type"   location="data"   start="0"   length="8"   value="18"/>
+	    </condition>
+	 </conditions>
+      
+	 <givenText text="IGMPv1 Membership Report"/>
+      </message>
+      
+      <message>
+         <source>	 
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+         	
+	 <conditions>
+	    <!-- Type ist 19 -->
+	    <condition>
+	       <binaryPointerWithValue   name="type"   location="data"   start="0"   length="8"   value="19"/>
+	    </condition>
+	 </conditions>
+      
+	 <givenText text="DVMRP"/>
+      </message>
+      
+      <message>
+         <source>	 
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+         	
+	 <conditions>
+	    <!-- Type ist 20 -->
+	    <condition>
+	       <binaryPointerWithValue   name="type"   location="data"   start="0"   length="8"   value="20"/>
+	    </condition>
+	 </conditions>
+      
+	 <givenText text="PIMv1"/>
+      </message>
+      
+      <message>
+         <source>	 
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+         	
+	 <conditions>
+	    <!-- Type ist 21 -->
+	    <condition>
+	       <binaryPointerWithValue   name="type"   location="data"   start="0"   length="8"   value="21"/>
+	    </condition>
+	 </conditions>
+      
+	 <givenText text="Cisco Trace Messages"/>
+      </message>
+      
+      <message>
+         <source>	 
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+         	
+	 <conditions>
+	    <!-- Type ist 22 -->
+	    <condition>
+	       <binaryPointerWithValue   name="type"   location="data"   start="0"   length="8"   value="22"/>
+	    </condition>
+	 </conditions>
+      
+	 <givenText text="IGMPv2 Membership Report"/>
+      </message>
+      
+      <message>
+         <source>	 
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+         	
+	 <conditions>
+	    <!-- Type ist 23 -->
+	    <condition>
+	       <binaryPointerWithValue   name="type"   location="data"   start="0"   length="8"   value="23"/>
+	    </condition>
+	 </conditions>
+      
+	 <givenText text="IGMPv2 Leave Group"/>
+      </message>
+      
+      <message>
+         <source>	 
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+         	
+	 <conditions>
+	    <!-- Type ist 30 -->
+	    <condition>
+	       <binaryPointerWithValue   name="type"   location="data"   start="0"   length="8"   value="30"/>
+	    </condition>
+	 </conditions>
+      
+	 <givenText text="Multicast Traceroute Response"/>
+      </message>
+      
+      <message>
+         <source>	 
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+         	
+	 <conditions>
+	    <!-- Type ist 31 -->
+	    <condition>
+	       <binaryPointerWithValue   name="type"   location="data"   start="0"   length="8"   value="31"/>
+	    </condition>
+	 </conditions>
+      
+	 <givenText text="Multicast Traceroute"/>
+      </message>
+      
+      <message>
+         <source>	 
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+         	
+	 <conditions>
+	    <!-- Type ist 34 -->
+	    <condition>
+	       <binaryPointerWithValue   name="type"   location="data"   start="0"   length="8"   value="34"/>
+	    </condition>
+	 </conditions>
+      
+	 <givenText text="IGMPv3 Membership Report"/>
+      </message>
+      
+      <message>
+         <source>	 
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+         	
+	 <conditions>
+	    <!-- Type ist 36 -->
+	    <condition>
+	       <binaryPointerWithValue   name="type"   location="data"   start="0"   length="8"   value="36"/>
+	    </condition>
+	 </conditions>
+      
+	 <givenText text="Multicast Router Advertisement"/>
+      </message>
+      
+      <message>
+         <source>	 
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+         	
+	 <conditions>
+	    <!-- Type ist 37 -->
+	    <condition>
+	       <binaryPointerWithValue   name="type"   location="data"   start="0"   length="8"   value="37"/>
+	    </condition>
+	 </conditions>
+      
+	 <givenText text="Multicast Router Solicitation"/>
+      </message>
+      
+      <message>
+         <source>	 
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+         	
+	 <conditions>
+	    <!-- Type ist 38 -->
+	    <condition>
+	       <binaryPointerWithValue   name="type"   location="data"   start="0"   length="8"   value="38"/>
+	    </condition>
+	 </conditions>
+      
+	 <givenText text="Multicast Router Termination"/>
+      </message>
+      
+      
+   </analyze>
+
+</plugin>

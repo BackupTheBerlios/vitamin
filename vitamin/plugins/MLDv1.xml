@@ -1,0 +1,95 @@
+<!--                                                            -->
+<!-- Hier werden glaub' ich IPv6-Extension-Header verwendet !!! -->
+<!--                                                            -->
+
+<plugin name="MLDv1">
+
+   <classify>                 
+      
+      <!-- das Type-Feld enthaelt entweder 130, 131 oder 132 (mehr Nachrichtentypen gibt es nicht) -->
+      <choice>
+         <condition>
+            <binaryPointerWithValue   name="type"   location="data"   start="0"   length="8"   value="130"/>
+         </condition>
+	 <condition>
+            <binaryPointerWithValue   name="type"   location="data"   start="0"   length="8"   value="131"/>
+         </condition>
+	 <condition>
+            <binaryPointerWithValue   name="type"   location="data"   start="0"   length="8"   value="132"/>
+         </condition>
+      </choice>
+      
+      <!-- Das Code-Feld ist immer 0 (STIMMT DAS?) -->
+      <condition>
+         <binaryPointerWithValue   name="code"   location="data"   start="8"   length="8"   value="0"/>
+      </condition>
+      
+      <!-- der Reserved-Bereich ist immer 0 -->
+      <condition>
+         <binaryPointerWithValue   name="reserved"   location="data"   start="24"   length="8"   value="0"/>
+      </condition>
+      
+   </classify>
+   
+   <analyze>
+      <!-- fuer jede der Nachrichten ein Message-Tag -->
+      <message>
+         <source>	 
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+         	
+	 <conditions>
+	    <!-- Kommando ist 1 -->
+	    <condition>
+	       <binaryPointerWithValue   name="type"   location="data"   start="0"   length="8"   value="130"/>
+	    </condition>
+	 </conditions>
+      
+	 <givenText text="130"/>
+      </message>
+      
+      <message>
+         <source>	 
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+         	
+	 <conditions>
+	    <!-- Kommando ist 1 -->
+	    <condition>
+	       <binaryPointerWithValue   name="type"   location="data"   start="0"   length="8"   value="131"/>
+	    </condition>
+	 </conditions>
+      
+	 <givenText text="131"/>
+      </message>
+      
+      <message>
+         <source>	 
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+         	
+	 <conditions>
+	    <!-- Kommando ist 1 -->
+	    <condition>
+	       <binaryPointerWithValue   name="type"   location="data"   start="0"   length="8"   value="132"/>
+	    </condition>
+	 </conditions>
+      
+	 <givenText text="132"/>
+      </message>
+      
+   </analyze>
+
+</plugin>

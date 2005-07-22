@@ -1,0 +1,321 @@
+<plugin name="DHCPv6">
+
+   <classify>                 
+      <!-- DHCPv6 wird immer ueber UDP uebertragen -->
+      <choice>
+         <condition>      
+            <binaryPointerWithValue   name="protocol"   location="ipv4"   value="17"/>
+         </condition>
+	 <condition>      
+            <binaryPointerWithValue   name="next header"   location="ipv6"   value="17"/>
+         </condition>
+      </choice>
+      
+      <!-- der Port ist immer 546 oder 547 -->
+      <choice>
+         <condition>      
+            <binaryPointerWithValue   name="destination port"   location="udp"   value="546"/>
+         </condition>
+	 <condition>      
+            <binaryPointerWithValue   name="destination port"   location="udp"   value="547"/>
+         </condition>
+      </choice>
+      
+      <!-- das Message-Feld (erstes Byte) muss eine Zahl zwischen 1 und 13 enthalten -->
+      <choice>
+         <condition>      
+            <binaryPointerWithValue   name="message"   location="data"   start="0"   length="8"   value="1"/>
+         </condition>
+	 <condition>      
+            <binaryPointerWithValue   name="message"   location="data"   start="0"   length="8"   value="2"/>
+         </condition>
+	 <condition>      
+            <binaryPointerWithValue   name="message"   location="data"   start="0"   length="8"   value="3"/>
+         </condition>
+	 <condition>      
+            <binaryPointerWithValue   name="message"   location="data"   start="0"   length="8"   value="4"/>
+         </condition>
+	 <condition>      
+            <binaryPointerWithValue   name="message"   location="data"   start="0"   length="8"   value="5"/>
+         </condition>
+	 <condition>      
+            <binaryPointerWithValue   name="message"   location="data"   start="0"   length="8"   value="6"/>
+         </condition>
+	 <condition>      
+            <binaryPointerWithValue   name="message"   location="data"   start="0"   length="8"   value="7"/>
+         </condition>
+	 <condition>      
+            <binaryPointerWithValue   name="message"   location="data"   start="0"   length="8"   value="8"/>
+         </condition>
+	 <condition>      
+            <binaryPointerWithValue   name="message"   location="data"   start="0"   length="8"   value="9"/>
+         </condition>
+	 <condition>      
+            <binaryPointerWithValue   name="message"   location="data"   start="0"   length="8"   value="10"/>
+         </condition>
+	 <condition>      
+            <binaryPointerWithValue   name="message"   location="data"   start="0"   length="8"   value="11"/>
+         </condition>
+	 <condition>      
+            <binaryPointerWithValue   name="message"   location="data"   start="0"   length="8"   value="12"/>
+         </condition>
+	 <condition>      
+            <binaryPointerWithValue   name="message"   location="data"   start="0"   length="8"   value="13"/>
+         </condition>
+      </choice>
+                  
+   </classify>
+   
+   <analyze>
+      <!-- fuer jeden Nachrichtentyp gibt es ein Message-Tag -->
+      <message>
+         <source>	 
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+         	
+	 <conditions>
+	    <!-- Type ist 1 -->
+	    <condition>
+	       <binaryPointerWithValue   name="message"   location="data"   start="0"   length="8"   value="1"/>
+	    </condition>
+	 </conditions>
+      
+	 <givenText text="solicit"/>
+      </message>
+      
+      <message>
+         <source>	 
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+         	
+	 <conditions>
+	    <!-- Type ist 2 -->
+	    <condition>
+	       <binaryPointerWithValue   name="message"   location="data"   start="0"   length="8"   value="2"/>
+	    </condition>
+	 </conditions>
+      
+	 <givenText text="advertise"/>
+      </message>
+      
+      <message>
+         <source>	 
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+         	
+	 <conditions>
+	    <!-- Type ist 3 -->
+	    <condition>
+	       <binaryPointerWithValue   name="message"   location="data"   start="0"   length="8"   value="3"/>
+	    </condition>
+	 </conditions>
+      
+	 <givenText text="request"/>
+      </message>
+      
+      <message>
+         <source>	 
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+         	
+	 <conditions>
+	    <!-- Type ist 4 -->
+	    <condition>
+	       <binaryPointerWithValue   name="message"   location="data"   start="0"   length="8"   value="4"/>
+	    </condition>
+	 </conditions>
+      
+	 <givenText text="confirm"/>
+      </message>
+      
+      <message>
+         <source>	 
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+         	
+	 <conditions>
+	    <!-- Type ist 5 -->
+	    <condition>
+	       <binaryPointerWithValue   name="message"   location="data"   start="0"   length="8"   value="5"/>
+	    </condition>
+	 </conditions>
+      
+	 <givenText text="renew"/>
+      </message>
+      
+      <message>
+         <source>	 
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+         	
+	 <conditions>
+	    <!-- Type ist 6 -->
+	    <condition>
+	       <binaryPointerWithValue   name="message"   location="data"   start="0"   length="8"   value="6"/>
+	    </condition>
+	 </conditions>
+      
+	 <givenText text="rebind"/>
+      </message>
+      
+      <message>
+         <source>	 
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+         	
+	 <conditions>
+	    <!-- Type ist 7 -->
+	    <condition>
+	       <binaryPointerWithValue   name="message"   location="data"   start="0"   length="8"   value="7"/>
+	    </condition>
+	 </conditions>
+      
+	 <givenText text="reply"/>
+      </message>
+      
+      <message>
+         <source>	 
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+         	
+	 <conditions>
+	    <!-- Type ist 8 -->
+	    <condition>
+	       <binaryPointerWithValue   name="message"   location="data"   start="0"   length="8"   value="8"/>
+	    </condition>
+	 </conditions>
+      
+	 <givenText text="release"/>
+      </message>
+      
+      <message>
+         <source>	 
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+         	
+	 <conditions>
+	    <!-- Type ist 9 -->
+	    <condition>
+	       <binaryPointerWithValue   name="message"   location="data"   start="0"   length="8"   value="9"/>
+	    </condition>
+	 </conditions>
+      
+	 <givenText text="decline"/>
+      </message>
+      
+      <message>
+         <source>	 
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+         	
+	 <conditions>
+	    <!-- Type ist 10 -->
+	    <condition>
+	       <binaryPointerWithValue   name="message"   location="data"   start="0"   length="8"   value="10"/>
+	    </condition>
+	 </conditions>
+      
+	 <givenText text="reconfigure"/>
+      </message>
+      
+      <message>
+         <source>	 
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+         	
+	 <conditions>
+	    <!-- Type ist 11 -->
+	    <condition>
+	       <binaryPointerWithValue   name="message"   location="data"   start="0"   length="8"   value="11"/>
+	    </condition>
+	 </conditions>
+      
+	 <givenText text="information-request"/>
+      </message>
+      
+      <message>
+         <source>	 
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+         	
+	 <conditions>
+	    <!-- Type ist 12 -->
+	    <condition>
+	       <binaryPointerWithValue   name="message"   location="data"   start="0"   length="8"   value="12"/>
+	    </condition>
+	 </conditions>
+      
+	 <givenText text="reply-forw."/>
+      </message>
+      
+      <message>
+         <source>	 
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+         	
+	 <conditions>
+	    <!-- Type ist 13 -->
+	    <condition>
+	       <binaryPointerWithValue   name="message"   location="data"   start="0"   length="8"   value="13"/>
+	    </condition>
+	 </conditions>
+      
+	 <givenText text="reply-repl."/>
+      </message>
+      
+      
+   </analyze>
+
+</plugin>

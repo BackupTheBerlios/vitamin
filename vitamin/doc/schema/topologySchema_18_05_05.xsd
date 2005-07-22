@@ -1,0 +1,40 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+   <xsd:element name="topology" type="topologyType"/>
+   
+   <xsd:complexType name="topologyType">
+      <xsd:sequence>
+         <xsd:element name="subnet" type="subnetType" maxOccurs="unbounded"/>
+      </xsd:sequence>     
+   </xsd:complexType>
+   
+   <xsd:complexType name="subnetType">
+      <xsd:sequence>         
+         <xsd:element name="node" type="nodeType" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      
+      <xsd:attribute name="type" type="subnetTypeType"/>
+      <xsd:attribute name="ip" type="xsd:string"/>
+      <xsd:attribute name="mask" type="xsd:int"/>
+      <xsd:attribute name="gateway" type="xsd:string"/>
+   </xsd:complexType>
+   
+   <xsd:simpleType name="subnetTypeType">
+         <xsd:restriction base="xsd:string">
+            <!-- hier werden die möglichen Subnettypen angegeben -->
+	    <xsd:enumeration value="internet"/>
+            <xsd:enumeration value="ethernet"/>
+         </xsd:restriction>
+   </xsd:simpleType>
+   
+   <xsd:complexType name="nodeType">
+      <xsd:simpleContent>         
+	 <xsd:extension base="xsd:string"> <!-- Inhalttyp des Elements -->
+            <xsd:attribute name="ip" type="xsd:string"/> <!-- Typ des Attributs -->
+	    <xsd:attribute name="name" type="xsd:string"/>
+	    <xsd:attribute name="mask" type="xsd:int"/>
+         </xsd:extension>
+      </xsd:simpleContent>      
+   </xsd:complexType>
+      
+</xsd:schema>

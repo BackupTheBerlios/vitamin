@@ -1,0 +1,50 @@
+<plugin name="RTP">
+
+   <classify>      
+      <!-- Der RTP-Header beginnt immer mit der RTP-Versionsnummer. Diese ist immer 2. -->
+      <condition>
+         <binaryPointerWithValue   name="version"   location="data"   start="0"   length="2"   value="2"/>      
+      </condition>
+      
+      <!-- Der Zielport eines RTP-Paketes muss immer gerade sein -->
+      <condition>
+         <binaryPointerWithValue   name="destination port"   location="udp"   value="EVEN"/>
+      </condition>
+      
+      <!-- RTP wird grundsätzlich über UDP übertragen -->
+      <choice>
+	 <condition>
+	    <binaryPointerWithValue   name="protocol"      location="ipv4"   value="17"/>
+	 </condition>
+	 <condition>
+	    <binaryPointerWithValue   name="next header"   location="ipv6"   value="17"/>
+	 </condition>
+      </choice>
+   </classify>
+   
+   <analyze>
+      <!-- RTP überträgt immer Ströme -->
+      <stream>
+         <!-- der Startrechner des Stroms -->
+	 <source>
+	    <binaryPointer   name="source address"   location="ip"/>
+	 </source>
+	 
+	 <!-- der Endrechner des Stroms -->
+	 <destination>
+	    <binaryPointer   name="destination address"   location="ip"/>
+	 </destination>
+	 
+	 <!-- anhand dieser Felder kann ein Paket einem bestimmten Strom zugeordnet werden -->
+	 <comparators>
+            <comparator>
+	       <binaryPointerStream   name="ssrc"   location="data"   start="64"   length="32"   value="SAME"/>
+	    </comparator>
+            <comparator>
+	       <binaryPointerStream   name="sequence number"   location="data"   start="16"   length="16"   value="INCREASE"/>
+	    </comparator>
+	 </comparators>
+      </stream>
+   </analyze>
+
+</plugin>

@@ -1,0 +1,32 @@
+<topology>
+
+   <!-- core router network -->
+   
+   <subnet type="ethernet" ip="3ffe:302:11:0:0:0:0:0" mask="48" gateway="internet">
+      <node ip="3ffe:302:11:1:0:0:0:1" name="router" mask="64"/> <!-- interface to Core Network -->
+      <node ip="3ffe:302:11:3:0:0:0:1" name="router" mask="64"/> <!-- interface to WIMAX Network -->
+   </subnet>
+
+   
+   <!-- Core Network -->
+   
+   <subnet type="ethernet" ip="3ffe:302:11:1:0:0:0:0" mask="64" gateway="3ffe:302:11:1:0:0:0:1">
+      <node ip="3ffe:302:11:1:204:75ff:fe7c:561c" name="video" mask="64"/>
+      <node ip="3ffe:302:11:1:204:75ff:fe7c:4643" name="sip" mask="64"/>
+   </subnet>
+
+      
+   <!-- WIMAX network -->
+   
+   <subnet type="ethernet" ip="3ffe:302:11:3:0:0:0:0" mask="64" gateway="3ffe:302:11:3:0:0:0:1">
+      <node ip="3ffe:302:11:3:206:5bff:fec2:6424" name="AR" mask="64"/>
+   </subnet>
+   
+   
+   <!-- Remote WIMAX network -->
+   
+   <subnet type="ethernet" ip="3ffe:302:11:4:0:0:0:0" mask="64" gateway="3ffe:302:11:3:206:5bff:fec2:6424">
+      <node ip="3ffe:302:11:4:206:5bff:fe64:e9c8" name="client2" mask="64"/>
+   </subnet>
+   
+</topology>

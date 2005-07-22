@@ -1,0 +1,47 @@
+<plugin name="MobileIPv4">
+
+
+   <classify>
+
+      <!-- mit diesen Bedingungen lassen sich die Registrierungsnachrichten 
+      von den Foreign Agents an den Home Agent visualisieren (gehen immer ber 434 UDP) -->      
+
+      <condition>
+         <binaryPointerWithValue location="data" name="destination port" value="434"/>
+      </condition>
+      
+      <choice>
+         <condition>
+            <binaryPointerWithValue location="ipv4" name="protocol" value="17"/>            
+         </condition>
+	 <condition>
+	    <binaryPointerWithValue location="ipv6" name="nextHeader" value="17"/>
+	 </condition>
+      </choice>
+
+   </classify>
+
+
+   <analyze>
+ 
+      <message>
+         <source>
+            <binaryPointer location="ip" name="source address"/>
+         </source>
+
+         <destination>
+            <binaryPointer location="ip" name="destination address"/>
+         </destination>
+
+         <conditions>
+
+         </conditions>
+
+         <givenText text="register"/>
+
+      </message>
+
+   </analyze>
+
+
+</plugin>

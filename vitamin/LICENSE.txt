@@ -1,0 +1,8 @@
+Vitamin is published under the GNU General Public License GPL
+(http://www.gnu.org/licenses/gpl.txt). Feel free to use it...
+
+The modified library JPcap (jpcap.sourceforge.net) which is used
+to capture packets from the network is published under the Mozilla
+Public License MPL (http://www.mozilla.org/MPL/MPL-1.1.txt). All
+files in the directory global/lib/net belong to JPcap.
+

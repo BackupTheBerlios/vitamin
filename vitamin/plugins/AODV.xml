@@ -1,0 +1,99 @@
+<plugin name="AODV">
+
+   <classify>
+   
+      <!-- das Type-Feld, also das erste Byte im Datenteil muss 1, 2 oder 3 sein -->
+      <!-- in allen AODV-Nachrichten gibt es einen reservierten Bereich, der immer 0 ist. -->
+      <choice>         
+	 <condition>
+	    <binaryPointerWithValue name="type" location="data" start="0" length="8" value="1"/>
+	    <conditionFor>
+	       <condition>
+	          <binaryPointerWithValue name="reserved" location="data" start="13" length="11" value="0"/>
+	       </condition>
+	    </conditionFor>
+	 </condition>
+	 
+	 <condition>
+	    <binaryPointerWithValue name="type" location="data" start="0" length="8" value="2"/>
+	    <conditionFor>
+	       <condition>
+	          <binaryPointerWithValue name="reserved" location="data" start="11" length="9" value="0"/>
+	       </condition>
+	    </conditionFor>
+	 </condition>
+	 
+	 <condition>
+	    <binaryPointerWithValue name="type" location="data" start="0" length="8" value="3"/>
+	    <conditionFor>
+	       <condition>
+	          <binaryPointerWithValue name="reserved" location="data" start="9" length="15" value="0"/>
+	       </condition>
+	    </conditionFor>
+	 </condition>
+      </choice>           
+      
+   </classify>   
+   
+   <analyze>
+   
+      <!-- RREQ -->
+      <message>
+         <source>
+	    <binaryPointer name="source address" location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer name="destination address" location="ip"/>
+	 </destination>
+	 
+	 <conditions>
+	    <condition>
+	       <binaryPointer name="type" location="data" start="0" length="8" value="1"/>
+	    </condition>
+	 </conditions>
+	 
+	 <givenText text="RREQ"/>
+      </message>
+      
+      <!-- RREP -->
+      <message>
+         <source>
+	    <binaryPointer name="source address" location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer name="destination address" location="ip"/>
+	 </destination>
+	 
+	 <conditions>
+	    <condition>
+	       <binaryPointer name="type" location="data" start="0" length="8" value="2"/>
+	    </condition>
+	 </conditions>
+	 
+	 <givenText text="RREP"/>
+      </message>
+      
+      <!-- RERR -->
+      <message>
+         <source>
+	    <binaryPointer name="source address" location="ip"/>
+	 </source>
+	 
+	 <destination>
+	    <binaryPointer name="destination address" location="ip"/>
+	 </destination>
+	 
+	 <conditions>
+	    <condition>
+	       <binaryPointer name="type" location="data" start="0" length="8" value="3"/>
+	    </condition>
+	 </conditions>
+	 
+	 <givenText text="RERR"/>
+      </message>
+   
+   </analyze>
+
+</plugin>

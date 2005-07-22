@@ -1,0 +1,72 @@
+<topology>
+
+   <!-- core router with all (relevant) interfaces -->
+
+   <!-- You can specify a subnet tag for specifying a computer with several interfaces (e.g. a router).  -->
+   
+   <subnet type="ethernet" ip="router" mask="0" gateway="internet">
+      <node ip="2001:638:201:9001:0:0:0:1" name="d-cr1_eth0" mask="48"/> <!-- router interface to subnet 9001 -->
+      <node ip="2001:638:201:9002:0:0:0:1" name="d-cr1_eth1" mask="48"/> <!-- router interface to subnet 9002 -->
+      <node ip="2001:638:201:9003:0:0:0:1" name="d-cr1_eth2" mask="48"/> <!-- router interface to subnet 9003 -->
+   </subnet>
+
+   
+   <!-- subnet 9001 -->
+
+   <!-- The gateway attribute says that this subnet is connected to the network through the specified node.
+        The software will search the IP given in "gateway" and will connect this subnet to this IP in the
+        diagram. -->
+   
+   <subnet type="ethernet" ip="2001:638:201:9001:0:0:0:0" mask="64" gateway="2001:638:201:9001:0:0:0:1">
+      <node ip="2001:638:201:9001:0:0:0:2" name="d-cn1" mask="64"/>
+   </subnet>
+
+      
+   <!-- subnet 9002 -->
+   
+   <subnet type="ethernet" ip="2001:638:201:9002:0:0:0:0" mask="64" gateway="2001:638:201:9002:0:0:0:1">
+      <node ip="2001:638:201:9002:0:0:0:2" name="d-ha" mask="64"/>
+   </subnet>
+   
+   
+   <!-- subnet 9003 -->
+   
+   <subnet type="ethernet" ip="2001:638:201:9003:0:0:0:0" mask="64" gateway="2001:638:201:9003:0:0:0:1">
+      <node ip="2001:638:201:9003:0:0:0:2" name="d-ar1_eth0" mask="64"/>
+      <node ip="2001:638:201:9003:0:0:0:3" name="d-ar2_eth0" mask="64"/>
+   </subnet>
+
+
+  <!-- AR 1 -->
+
+  <!-- This is also not a real subnet, but a computer with several interfaces, which can be looked at as
+       a subnet .-->
+
+  <subnet type="ethernet" ip="ar1" mask="0" gateway="2001:638:201:9003:0:0:0:2">
+      <node ip="2001:638:201:9010:0:0:0:1" name="d-ar1_eth1" mask="64"/>
+  </subnet>
+
+
+  <!-- AR 2 -->
+
+  <subnet type="ethernet" ip="ar2" mask="0" gateway="2001:638:201:9003:0:0:0:3">
+      <node ip="2001:638:201:9011:0:0:0:1" name="d-ar2_eth1" mask="64"/>
+  </subnet>
+
+
+  <!-- subnet 9010 -->
+
+   <subnet type="ethernet" ip="2001:638:201:9010:0:0:0:0" mask="64" gateway="2001:638:201:9010:0:0:0:1"> <!-- gateway is d-ar1 -->
+      <node ip="2001:638:201:9010:0:0:0:2" name="d-mn1" mask="64"/>
+   </subnet>
+
+
+  <!-- subnet 9011 -->
+
+   <subnet type="ethernet" ip="2001:638:201:9011:0:0:0:0" mask="64" gateway="2001:638:201:9011:0:0:0:1"> <!-- gateway is d-ar2 -->
+      <node ip="2001:638:201:9011:0:0:0:2" name="d-pda1" mask="64"/>
+   </subnet>
+
+   
+</topology>
+
